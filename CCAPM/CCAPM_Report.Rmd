@@ -1,0 +1,161 @@
+---
+output:
+  pdf_document: default
+  html_document: default
+  word_document: default
+---
+---
+## CCAMP - Consumer Capital Asset Pricing Model
+
+The goal is to create 10 regression models to identify beta values (risk)
+
+Part of analysis is to create autocoreglama, investigate autocorrelation and apply reasonable Lag to solve autocorrelation problem. Autocorrelation means data correlated with itself over specific time
+
+```{r}
+library(Hmisc)
+```
+
+```{r}
+CCAPM <- read.delim("Data/CCAPM.txt")
+attach(CCAPM)
+CCAPM[1:5,]
+```
+
+It shows financial instrument dependency of consumers, where r1 is a smaller company and their return of investment. Continuously, r2 is a bigger company with a lower possible return and risk and etc.
+
+
+```{r}
+acf(r1)
+```
+
+There is an autocorellation with 1, 7, 8, 12 months. Lag 8 (8 month) is not included since p value is to high and it does not required to solve autocorrelation problem
+
+```{r}
+m1 <- lm(r1 ~ cons + Lag(r1, 1) + Lag(r1, 7) + Lag(r1, 12))
+summary(m1)
+acf(residuals(m1))
+```
+
+By residuals autocoreglama, Lag problem is solved
+
+```{r}
+acf(r2)
+```
+
+Autocorrelation with 1, 8, 12 months
+
+```{r}
+m2 <- lm(r2 ~ cons + Lag(r2, 1) + Lag(r2, 8) + Lag(r2, 12))
+summary(m2)
+acf(residuals(m2))
+```
+
+```{r}
+acf(r3)
+```
+
+Autocorrelation with 1, 8, 12 months
+
+```{r}
+m3 <- lm(r3 ~ cons + Lag(r3, 1) + Lag(r3, 8) + Lag(r3, 12))
+summary(m3)
+acf(residuals(m3))
+```
+
+Lags of more than 12 months are not very significant for given regression model
+
+```{r}
+acf(r4)
+```
+
+Autocorrelation with 1, 8, 12 months
+
+```{r}
+m4 <- lm(r4 ~ cons + Lag(r4, 1) + Lag(r4, 8) + Lag(r4, 12))
+summary(m4)
+acf(residuals(m4))
+```
+
+P value for Lag 12 is higher than 0.05, but lower than 0.10, so we will keep it since it is really important to solve autocorrelation case
+
+```{r}
+acf(r5)
+```
+
+Autocorrelation with 1, 8, 12 months
+
+Important to mention that autocorrelation with 12 month influence is decreasing with every bigger company, lag with 12 month is decreasing
+
+```{r}
+m5 <- lm(r5 ~ cons + Lag(r5, 1) + Lag(r5, 8) + Lag(r5, 12))
+summary(m5)
+acf(residuals(m5))
+```
+
+```{r}
+acf(r6)
+```
+
+Autocorrelation with 1, 8 months, 12 isnot significant anymore
+
+```{r}
+m6 <- lm(r6 ~ cons + Lag(r6, 1) + Lag(r6, 8))
+summary(m6)
+acf(residuals(m6))
+```
+
+```{r}
+acf(r7)
+```
+
+Autocorrelation with 1, 8 months
+
+```{r}
+m7 <- lm(r7 ~ cons + Lag(r7, 1) + Lag(r7, 8))
+summary(m7)
+acf(residuals(m7))
+```
+
+Can be spotted that 5 month is very closed to be autocorrelated
+
+```{r}
+acf(r8)
+```
+
+Autocorrelation with only 8 month
+
+```{r}
+m8 <- lm(r8 ~ cons + Lag(r8, 8))
+summary(m8)
+acf(residuals(m8))
+```
+
+Lag 8 has 10.7% p-value, assumsing it is still significant, since it is around 10%
+
+```{r}
+acf(r9)
+```
+
+Autocorrelation with 8 month
+
+```{r}
+m9 <- lm(r9 ~ cons + Lag(r9, 8))
+summary(m9)
+acf(residuals(m9))
+```
+
+```{r}
+acf(r10)
+```
+
+Autocorrelation with 5 month
+
+```{r}
+m10 <- lm(r10 ~ cons + Lag(r10, 5))
+summary(m10)
+acf(residuals(m10))
+```
+
+Based on summaries, beta (bigger risk, bigger return) values increased with a bigger company.
+
+Bigger companies have less influence of 1 and 12 months for autocorrelation.

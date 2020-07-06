@@ -12,4 +12,4 @@ Econometric Models developed during the course in Vilnius University.
 
 **Data** gathers all data which is used in different foldiers/analysis
 
-List is updating (Total
+List is updating (Total 7 Analysis)

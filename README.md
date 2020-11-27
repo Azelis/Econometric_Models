@@ -11,4 +11,4 @@ Econometric Models developed during the course in Vilnius University.
 
 
 
-`Data` gathers all data which is used in different foldiers/analysis
+`Data` gathers all data which is used in different folders/analysis
